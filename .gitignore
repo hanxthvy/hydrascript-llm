@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+auto_pipeline.log
+distill_5000.log
+distill_v2.log
+distill_hys_1000.log
+train_v2.log
+
+# Large binary files & models
+*.gguf
+*.bin
+qn3_hxprjkt_hydra/
+qn3_hxprjktv2_hydra/
+
+# Datasets (large files - only samples tracked in datasets/)
+distilled_hydra/
+distilled_hydra_v2/
+distilled_hys_1000/
+dataset_v3_combined/
+data_hydra/
+data_hydra_v2/
+*.jsonl
+!datasets/*.jsonl
+
+# Checkpoints
+checkpoints_hydra/
+checkpoints_hydra_v2/
+
+# Kaggle push dir
+kaggle_v3_push/
+
+# Local layout & temp
+*.kdl
+.tmp/
