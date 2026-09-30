@@ -1,0 +1,102 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-09-30T17:35:00+07:00",
+    "name": "llama.cpp Server",
+    "author": "reyhan231580@gmail.com",
+    "description": "High-performance LLM inference server powered by llama.cpp. Exposes an OpenAI-compatible API (/v1/chat/completions) with built-in Web UI.",
+    "features": null,
+    "docker_images": {
+        "Debian Bookworm": "ghcr.io/parkervcp/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup": "bash -c \"export LD_LIBRARY_PATH=.:\\$LD_LIBRARY_PATH && exec ./llama-server -m {{MODEL_FILE}} --host 0.0.0.0 --port {{SERVER_PORT}} -c {{CONTEXT_SIZE}} -t {{THREADS}} --temp {{TEMPERATURE}} {{ADDITIONAL_FLAGS}}\"",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"llama_server: listening on\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\r\n# [xihanzu-NR]\r\n# llama.cpp Pterodactyl Installation Script\r\n\r\napt-get update\r\napt-get install -y curl jq tar libgomp1 ca-certificates\r\n\r\ncd /mnt/server\r\n\r\nif [ \"${LLAMA_VERSION}\" = \"latest\" ] || [ -z \"${LLAMA_VERSION}\" ]; then\r\n    echo \"Fetching latest release tag from GitHub...\"\r\n    LLAMA_VERSION=$(curl -sL https://api.github.com/repos/ggerganov/llama.cpp/releases | jq -r '[.[].tag_name | select(startswith(\"b\"))][0]')\r\nfi\r\n\r\necho \"Using llama.cpp version: ${LLAMA_VERSION}\"\r\nDOWNLOAD_URL=\"https://github.com/ggerganov/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.tar.gz\"\r\n\r\necho \"Downloading binary from: ${DOWNLOAD_URL}\"\r\ncurl -sL \"${DOWNLOAD_URL}\" -o llama.tar.gz\r\n\r\nif [ ! -f llama.tar.gz ] || [ ! -s llama.tar.gz ]; then\r\n    echo \"Error: Failed to download llama.tar.gz! Check release tag.\"\r\n    exit 1\r\nfi\r\n\r\necho \"Extracting binaries and libraries...\"\r\ntar -xzf llama.tar.gz --strip-components=1\r\nrm -f llama.tar.gz\r\nchmod +x llama-server llama-cli\r\n\r\nif [ -n \"${MODEL_DOWNLOAD_URL}\" ]; then\r\n    echo \"Downloading model from: ${MODEL_DOWNLOAD_URL}\"\r\n    curl -L --progress-bar -o \"${MODEL_FILE}\" \"${MODEL_DOWNLOAD_URL}\"\r\nfi\r\n\r\necho \"Installation complete! Binary ready at /home/container/llama-server\"",
+            "container": "ghcr.io/pterodactyl/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Model File",
+            "description": "Nama file model .gguf di dalam folder server (misal: qn3-hxprjktv2-q8_0.gguf atau model.gguf)",
+            "env_variable": "MODEL_FILE",
+            "default_value": "model.gguf",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Model Download URL",
+            "description": "URL download langsung file .gguf saat install (opsional, kosongkan jika upload manual via SFTP)",
+            "env_variable": "MODEL_DOWNLOAD_URL",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Context Size",
+            "description": "Ukuran context window (token). Default: 2048",
+            "env_variable": "CONTEXT_SIZE",
+            "default_value": "2048",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|min:256|max:65536",
+            "field_type": "text"
+        },
+        {
+            "name": "CPU Threads",
+            "description": "Jumlah thread CPU untuk inference komputasi.",
+            "env_variable": "THREADS",
+            "default_value": "2",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|min:1|max:64",
+            "field_type": "text"
+        },
+        {
+            "name": "Temperature",
+            "description": "Tingkat kreativitas output (0.0 = presisi coding, 0.7 = kreatif)",
+            "env_variable": "TEMPERATURE",
+            "default_value": "0.2",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:10",
+            "field_type": "text"
+        },
+        {
+            "name": "llama.cpp Version",
+            "description": "Tag rilis llama.cpp (contoh: latest atau b11277)",
+            "env_variable": "LLAMA_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Additional Flags",
+            "description": "Argumen tambahan untuk llama-server (contoh: --no-warmup, --api-key rahasia123, -n 512)",
+            "env_variable": "ADDITIONAL_FLAGS",
+            "default_value": "--no-warmup",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        }
+    ]
+}
