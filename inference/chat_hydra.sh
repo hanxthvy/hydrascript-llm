@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # [xihanzu-NR]
 export LD_LIBRARY_PATH="/tmp/llama.cpp/build/bin:${LD_LIBRARY_PATH:-}"
-MODEL_PATH="/root/models/qn3_hxprjkt_hydra/qn3-hxprjkt-q8_0.gguf"
+MODEL_PATH="/root/models/qn3_hxprjktv2_hydra/qn3-hxprjktv2-q8_0.gguf"
 LLAMA_CLI="/tmp/llama.cpp/build/bin/llama-cli"
 
 clear
 echo "=================================================================="
-echo "  ⚡ Qwen3-0.6B Fine-Tuned HydraScript (Q8_0 GGUF)"
-echo "  Ukuran: 610 MB | RAM: ~700 MB | Threads: 2 CPU"
-echo "  Format: Bilingual Indo/Eng + Zero-Watermark"
+echo "  ⚡ Qwen3-0.6B Fine-Tuned HydraScript V2 (qn3-hxprjktv2-q8_0)"
+echo "  Dataset: 6,965 Samples (6K .hyx UI + 965 .hys Backend Logic)"
+echo "  Format: GGUF Q8_0 (~610 MB) | Precision: High | Threads: 2 CPU"
 echo "=================================================================="
 echo ""
 
