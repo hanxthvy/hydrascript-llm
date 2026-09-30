@@ -13,7 +13,7 @@
         "Debian Bookworm": "ghcr.io/parkervcp/yolks:debian"
     },
     "file_denylist": [],
-    "startup": "bash -c \"export LD_LIBRARY_PATH=.:\\$LD_LIBRARY_PATH && exec ./llama-server -m {{MODEL_FILE}} --host 0.0.0.0 --port {{SERVER_PORT}} -c {{CONTEXT_SIZE}} -t {{THREADS}} --temp {{TEMPERATURE}} --reasoning off --chat-template-file template.jinja {{ADDITIONAL_FLAGS}}\"",
+    "startup": "bash -c \"export LD_LIBRARY_PATH=.:\\ && exec ./llama-server -m {{MODEL_FILE}} --host 0.0.0.0 --port {{SERVER_PORT}} -c {{CONTEXT_SIZE}} -t {{THREADS}} --temp {{TEMPERATURE}} --repeat-penalty 1.15 --reasoning off --chat-template-file template.jinja {{ADDITIONAL_FLAGS}}\"",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"llama_server: listening on\"\r\n}",
