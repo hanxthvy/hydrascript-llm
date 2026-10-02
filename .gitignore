@@ -38,3 +38,6 @@ kaggle_v3_push/
 *.kdl
 .tmp/
 qn3_hxprjktv2_safetensors/
+chat_hydra.sh
+run.sh
+serve_files.py
